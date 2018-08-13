@@ -9,7 +9,7 @@ import { Loading } from './LoadingComponent';
 
 const mapStateToProps = state => {
     return {
-        dishes: state.dishes,
+        dishes: state.dishes
     }
 }
 

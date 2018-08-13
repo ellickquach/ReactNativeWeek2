@@ -13,6 +13,8 @@ import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/
 
 import Reservation from './ReservationComponent';
 
+import Favorites from './FavoriteComponent';
+
 const mapStateToProps = state => {
     return {
     }
@@ -122,6 +124,21 @@ const ReservationNavigator = createStackNavigator({
     })
 });
 
+const FavoritesNavigator = createStackNavigator({
+    Contact: { screen: Favorites },
+}, {
+    navigationOptions: ({ navigation }) => ({
+        headerLeft: <Icon name='menu' size={24} color='white' onPress={() => navigation.toggleDrawer()} />,
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        }
+    })
+});
+
 const MainNavigator = createDrawerNavigator({
     Home: {
         screen: HomeNavigator, 
@@ -160,6 +177,16 @@ const MainNavigator = createDrawerNavigator({
             drawerLabel: 'Contact Us',
             drawerIcon: ({ tintColor }) => (
                 <Icon name='address-card' type='font-awesome' size={22} color={tintColor} />
+            )
+        }
+    },
+    Favorites: {
+        screen: FavoritesNavigator,
+        navigationOptions: {
+            title: 'My Favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({ tintColor }) => (
+                <Icon name='heart' type='font-awesome' size={24} color={tintColor} />
             )
         }
     },
