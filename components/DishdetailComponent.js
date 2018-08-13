@@ -9,6 +9,8 @@ import { postFavorite, postComment } from '../redux/ActionCreators';
 
 import Rating from 'react-native-easy-rating';
 
+import * as Animatable from 'react-native-animatable';
+
 const mapStateToProps = state => {
     return {
         dishes: state.dishes,
@@ -94,37 +96,42 @@ class Dishdetail extends Component {
 
         return(
             <ScrollView>
-                <Card
-                    featuredTitle={dish.name}
-                    image={{ uri: baseUrl + dish.image }}
-                >
-                    <Text style={{margin: 10}}>
-                        {dish.description}
-                    </Text>
-                    <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000} >
+                    <Card
+                        featuredTitle={dish.name}
+                        image={{ uri: baseUrl + dish.image }}
+                    >
+                        <Text style={{margin: 10}}>
+                            {dish.description}
+                        </Text>
+                        <View style={{justifyContent: 'center', flexDirection: 'row'}}>
 
-                        <Icon
-                            style={{flex:1}}
-                            raised
-                            reverse
-                            name={ favorite ? 'heart' : 'heart-o' }
-                            type='font-awesome'
-                            color='#f50'
-                            onPress={() => favorite ? console.log('Already favorite') : this.markFavorite(dishId)}
-                        />
-                        
-                        <Icon
-                            style={{flex:2}}
-                            raised
-                            reverse
-                            name='pencil'
-                            type='font-awesome'
-                            color='#512DA8'
-                            onPress={() => this.commentModalToggle(dishId)}
-                        />
-                    </View>
-                </Card>
-                <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
+                            <Icon
+                                style={{flex:1}}
+                                raised
+                                reverse
+                                name={ favorite ? 'heart' : 'heart-o' }
+                                type='font-awesome'
+                                color='#f50'
+                                onPress={() => favorite ? console.log('Already favorite') : this.markFavorite(dishId)}
+                            />
+                            
+                            <Icon
+                                style={{flex:2}}
+                                raised
+                                reverse
+                                name='pencil'
+                                type='font-awesome'
+                                color='#512DA8'
+                                onPress={() => this.commentModalToggle(dishId)}
+                            />
+                        </View>
+                    </Card>
+                </Animatable.View>
+                <Animatable.View animation='fadeInUp' duration={2000} delay={1000} >
+                    <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
+                </Animatable.View>
+
                 <Modal
                         animationType={'slide'}
                         transparent={false}
