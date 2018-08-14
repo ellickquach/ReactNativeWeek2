@@ -89,6 +89,8 @@ class Dishdetail extends Component {
         this.props.postFavorite(dishId);
     }
     
+    handleViewRef = ref => this.view = ref;
+
     render() {
         const dishId = this.props.navigation.getParam('dishId','');
         const dish = this.props.dishes.dishes[+dishId];
@@ -105,6 +107,10 @@ class Dishdetail extends Component {
             onStartShouldSetPanResponder: (e, gestureState) => {
                 return true;
             },
+            onPanResponderGrant: () => {
+                this.view.shake(1000)
+                    .then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));
+            },
             onPanResponderEnd: (e, gestureState) => {
                 if (recognizeDrag(gestureState)) 
                     Alert.alert(
@@ -119,7 +125,6 @@ class Dishdetail extends Component {
                             {
                                 text: 'OK',
                                 onPress: () => favorite ? console.log('Already favorite') : this.markFavorite(dishId)
-
                             }
                         ],
                         { cancelable: false }
@@ -131,6 +136,7 @@ class Dishdetail extends Component {
         return(
             <ScrollView>
                 <Animatable.View animation='fadeInDown' duration={2000} delay={1000}
+                    ref={this.handleViewRef}
                     {...panResponder.panHandlers}
                 >
                     <Card

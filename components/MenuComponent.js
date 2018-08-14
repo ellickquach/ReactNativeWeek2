@@ -25,7 +25,6 @@ class Menu extends Component {
 
         const renderMenuItem = ({item, index}) => {
             return(
-                <Animatable.View animation='fadeInRightBig' duration={2000} >
                     <Tile
                         key={index}
                         title={item.name}
@@ -34,7 +33,6 @@ class Menu extends Component {
                         onPress={() => navigate('Dishdetail', { dishId: item.id })}
                         imageSrc={{ uri: baseUrl + item.image }}
                     />
-                </Animatable.View>
             );
         }
 
@@ -54,11 +52,13 @@ class Menu extends Component {
         }
         else {
             return(
-                <FlatList
-                    data={this.props.dishes.dishes}
-                    renderItem={renderMenuItem}
-                    keyExtractor={item => item.id.toString()}
-                />
+                <Animatable.View animation='fadeInRightBig' duration={2000} >
+                    <FlatList
+                        data={this.props.dishes.dishes}
+                        renderItem={renderMenuItem}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </Animatable.View>
             );
         }
     }
