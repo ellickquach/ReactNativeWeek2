@@ -98,9 +98,12 @@ class Dishdetail extends Component {
 
         const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
             if (dx < -200) // right to left gesture
-                return true;
-            else    
-                return false;
+                return 1;
+            else 
+            if (dx > 200) // left to right
+                return 2;
+            else
+                return 0;
         };
 
         const panResponder = PanResponder.create({
@@ -108,27 +111,34 @@ class Dishdetail extends Component {
                 return true;
             },
             onPanResponderGrant: () => {
-                this.view.shake(1000)
-                    .then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));
+                    this.view.shake(2000)
+                        .then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));
             },
             onPanResponderEnd: (e, gestureState) => {
-                if (recognizeDrag(gestureState)) 
-                    Alert.alert(
-                        'Add to Favorites?',
-                        'Are you sure you wish to add ' + dish.name + ' to your favorites?',
-                        [
-                            {
-                                text: 'Cancel',
-                                onPress: () => console.log('Cancel pressed'),
-                                style: 'cancel'
-                            },
-                            {
-                                text: 'OK',
-                                onPress: () => favorite ? console.log('Already favorite') : this.markFavorite(dishId)
-                            }
-                        ],
-                        { cancelable: false }
-                    )
+                switch(recognizeDrag(gestureState)) {
+                    case 1:
+                        Alert.alert(
+                            'Add to Favorites?',
+                            'Are you sure you wish to add ' + dish.name + ' to your favorites?',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log('Cancel pressed'),
+                                    style: 'cancel'
+                                },
+                                {
+                                    text: 'OK',
+                                    onPress: () => favorite ? console.log('Already favorite') : this.markFavorite(dishId)
+                                }
+                            ],
+                            { cancelable: false }
+                        );
+                        break;
+                    case 2:
+                        this.commentModalToggle(dishId);
+                        break;
+                }
+                
                 return true;
             }
         });
