@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, Modal, Button, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Input } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -94,9 +94,45 @@ class Dishdetail extends Component {
         const dish = this.props.dishes.dishes[+dishId];
         const favorite = this.props.favorites.some(el => el === dishId);
 
+        const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+            if (dx < -200) // right to left gesture
+                return true;
+            else    
+                return false;
+        };
+
+        const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (e, gestureState) => {
+                return true;
+            },
+            onPanResponderEnd: (e, gestureState) => {
+                if (recognizeDrag(gestureState)) 
+                    Alert.alert(
+                        'Add to Favorites?',
+                        'Are you sure you wish to add ' + dish.name + ' to your favorites?',
+                        [
+                            {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel pressed'),
+                                style: 'cancel'
+                            },
+                            {
+                                text: 'OK',
+                                onPress: () => favorite ? console.log('Already favorite') : this.markFavorite(dishId)
+
+                            }
+                        ],
+                        { cancelable: false }
+                    )
+                return true;
+            }
+        });
+
         return(
             <ScrollView>
-                <Animatable.View animation='fadeInDown' duration={2000} delay={1000} >
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}
+                    {...panResponder.panHandlers}
+                >
                     <Card
                         featuredTitle={dish.name}
                         image={{ uri: baseUrl + dish.image }}
