@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder } from 'react-native';
+import { View, Text, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Input } from 'react-native-elements';
 
 import { connect } from 'react-redux';
@@ -88,7 +88,7 @@ class Dishdetail extends Component {
     markFavorite(dishId) {
         this.props.postFavorite(dishId);
     }
-    
+
     handleViewRef = ref => this.view = ref;
 
     render() {
@@ -143,6 +143,16 @@ class Dishdetail extends Component {
             }
         });
 
+        const shareDish = (title, message, url) => {
+            Share.share({
+                title: title,
+                message: title + ': ' + message + ' ' + url,
+                url: url
+            }, {
+                dialogTitle: 'Share ' + title
+            });
+        }
+        
         return(
             <ScrollView>
                 <Animatable.View animation='fadeInDown' duration={2000} delay={1000}
@@ -176,6 +186,15 @@ class Dishdetail extends Component {
                                 type='font-awesome'
                                 color='#512DA8'
                                 onPress={() => this.commentModalToggle(dishId)}
+                            />
+
+                            <Icon
+                                raised
+                                reverse 
+                                name='share'
+                                type='font-awesome'
+                                color='#51D2A8'
+                                onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
                             />
                         </View>
                     </Card>
